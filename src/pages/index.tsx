@@ -1,118 +1,285 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
+import { Button } from "primereact/button";
 
-const inter = Inter({ subsets: ["latin"] });
+import { DragEventHandler, useCallback, useEffect, useState } from "react";
+import ReactFlow, {
+  Background,
+  Handle,
+  Position,
+  addEdge,
+  useEdgesState,
+  useNodeId,
+  useNodesState,
+  useStore,
+} from "reactflow";
+
+import { Sidebar } from "@/componets/Sidebar";
+import { NodeWrapper } from "@/componets/NodeWrapper";
+import { InputNode } from "@/componets/util-nodes/InputNode";
+import { ImageNode } from "@/componets/util-nodes/ImageNode";
+
+import { constructGraphs, getEndingNodes, runGraph } from "@/utils/formatGraph";
+import { cloneDeep } from "lodash";
+import { GenerateImageNode } from "@/componets/replicate-nodes/GenerateImageNode";
+import { RemoveBackgroudNode } from "@/componets/replicate-nodes/RemoveBackgroudNode";
+import { BecomeImageNode } from "@/componets/replicate-nodes/BecomeImageNode";
+import { FaceToStickerNode } from "@/componets/replicate-nodes/FaceToStickerNode";
+
+const nodeTypes = {
+  image: ImageNode,
+  text: InputNode,
+  generateImage: GenerateImageNode,
+  result: ResultNode,
+  removeBG: RemoveBackgroudNode,
+  becomeImage: BecomeImageNode,
+  faceToSticker: FaceToStickerNode
+};
+
+function getDefaultNodeDataByType(type: string) {
+  if (type === "generateImage") {
+    return {
+      status: "init",
+      inputType: ["string"],
+      outputType: "image",
+    };
+  }
+
+  if (type === "faceToSticker"){
+    return {
+      status: "init",
+      inputType: "image",
+      outputType: "image",
+    };
+  }
+
+  if (type === "text") {
+    return {
+      outputType: "string",
+    };
+  }
+  if (type === "removeBG") {
+    return {
+      status: "init",
+      inputType: "image",
+      outputType: "image",
+    };
+  }
+  if (type === "result") {
+    return {
+      result: null,
+    };
+  }
+  if (type === "becomeImage"){
+    return {
+      status: "init",
+      inputType: ["image", "image"],
+      outputType: "image",
+    }
+  }
+  return {};
+}
+
+let id = 0;
+const getId = () => `dndnode_${id++}`;
 
 export default function Home() {
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+
+  const onConnect = useCallback(
+    (params: any) => setEdges((eds) => addEdge(params, eds)),
+    []
+  );
+
+  const runQuery = () => {
+    const { graph, nodeDependencies } = constructGraphs(nodes, edges);
+    const endingNodeIds = getEndingNodes(nodeDependencies, graph);
+
+    const { graph: reversedGraph } = constructGraphs(nodes, edges, {
+      isReversed: true,
+    });
+
+    runGraph(
+      nodes,
+      reversedGraph,
+      endingNodeIds[0],
+      (node, inputData) => {
+        setNodes((nodes) => {
+          const updatedNodeIndex = nodes.findIndex((nd) => nd.id === node.id);
+          if (updatedNodeIndex !== -1) {
+            const updatedNode = cloneDeep(nodes[updatedNodeIndex]);
+            updatedNode.data.inputData = inputData;
+            updatedNode.data.status = "pending";
+            const newNodes = [...nodes];
+            newNodes[updatedNodeIndex] = updatedNode;
+            return newNodes;
+          }
+          return nodes;
+        });
+      },
+      (node, outputData) => {
+        setNodes((nodes) => {
+          const updatedNodeIndex = nodes.findIndex((nd) => nd.id === node.id);
+          if (updatedNodeIndex !== -1) {
+            const updatedNode = cloneDeep(nodes[updatedNodeIndex]);
+            updatedNode.data.result = outputData;
+            updatedNode.data.status = "success";
+            const newNodes = [...nodes];
+            newNodes[updatedNodeIndex] = updatedNode;
+            return newNodes;
+          }
+          return nodes;
+        });
+      },
+      (node, error) => {
+        setNodes((nodes) => {
+          const updatedNodeIndex = nodes.findIndex((nd) => nd.id === node.id);
+          if (updatedNodeIndex !== -1) {
+            const updatedNode = cloneDeep(nodes[updatedNodeIndex]);
+            updatedNode.data.status = "error";
+            const newNodes = [...nodes];
+            newNodes[updatedNodeIndex] = updatedNode;
+            return newNodes;
+          }
+          return nodes;
+        });
+      }
+    );
+
+    if (!endingNodeIds.length) {
+      throw Error("Ending nodes not found");
+    }
+  };
+
+  const onDragOver = useCallback<DragEventHandler<HTMLDivElement>>((event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+  }, []);
+
+  const onDrop = useCallback(
+    (event: any) => {
+      event.preventDefault();
+
+      const type = event.dataTransfer.getData("application/reactflow");
+
+      // check if the dropped element is valid
+      if (typeof type === "undefined" || !type) {
+        return;
+      }
+
+      const position = reactFlowInstance.screenToFlowPosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+
+      const newNode = {
+        id: getId(),
+        type,
+        position,
+        data: getDefaultNodeDataByType(type),
+        // dragHandle: ".custom-drag-handle",
+      };
+
+      setNodes((nds) => nds.concat(newNode));
+    },
+    [reactFlowInstance]
+  );
+
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/pages/index.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div className="w-full h-screen">
+      <header className="w-full h-20 shadow-md relative z-10">
+        Balance: 100
+      </header>
+      <main className="w-full h-[calc(100vh-80px)] gap-3 p-3 grid grid-cols-12">
+        <div className="col-span-4">
+          <Sidebar />
         </div>
-      </div>
+        <div className="bg-gray-100 p-4 rounded-xl relative col-span-8 h-full">
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            nodeTypes={nodeTypes}
+            onInit={setReactFlowInstance}
+            edgesFocusable
+            edgesUpdatable
+            nodesFocusable
+            onDragOver={onDragOver}
+            onDrop={onDrop}
+            fitView
+            snapToGrid
+          >
+            <Background />
+          </ReactFlow>
+          <Button
+            size="small"
+            onClick={runQuery}
+            className="absolute bottom-4 right-4"
+          >
+            Run Query
+          </Button>
+        </div>
+      </main>
+    </div>
+  );
+}
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+function ResultNode({ data }: any) {
+  const nodeId = useNodeId();
+
+  const [resultType, setResultType] = useState<string | null>(null);
+
+  const getNodes = useStore((store) => store.getNodes);
+
+  const targetEdge = useStore((s) => s.edges.find((e) => e.target === nodeId));
+
+  useEffect(() => {
+    if (targetEdge) {
+      const nodes = getNodes();
+      const sourceNode = nodes.find((node) => node.id === targetEdge.source);
+      if (sourceNode) {
+        setResultType(sourceNode.data.outputType);
+      }
+    } else {
+      setResultType(null);
+    }
+  }, [targetEdge]);
+
+  return (
+    <NodeWrapper status={data.status} title="Result">
+      <div className="px-4 py-2 bg-stone-200 text-stone-800 w-full flex justify-center">
+        Inputs
+      </div>
+      <div className="relative py-4">
+        <Handle
+          type="target"
+          onConnect={console.log}
+          className="flex"
+          position={Position.Left}
         />
+        <div className="ml-4">
+          Result: {resultType ? resultType : "No Result Type"}
+        </div>
+        {resultType === "image" && data.result && (
+          <>
+            <div className="m-2 w-[420px] h-[300px] flex items-center justify-center aspect-video bg-stone-200">
+              <img src={data.result} className="object-contain w-full h-full" />
+            </div>
+            <a
+              href={data.result}
+              className="ml-2 text-blue-400"
+              target="_blank"
+            >
+              Download
+            </a>
+          </>
+        )}
+        {resultType === "image" && !data.result && (
+          <div className="m-2 w-[420px] h-[300px] flex items-center justify-center aspect-video bg-stone-200" />
+        )}
       </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Discover and deploy boilerplate example Next.js&nbsp;projects.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    </NodeWrapper>
   );
 }
