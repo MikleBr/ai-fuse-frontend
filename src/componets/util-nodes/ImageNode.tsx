@@ -1,10 +1,8 @@
-import { InputText } from "primereact/inputtext";
 import { NodeWrapper } from "../NodeWrapper";
 import { Handle, Position, useNodeId, useReactFlow, useStore } from "reactflow";
 import clsx from "clsx";
 import cloneDeep from "lodash/cloneDeep";
 import { ChangeEventHandler, useEffect, useState } from "react";
-import { FileUpload } from "primereact/fileupload";
 
 export function ImageNode({data}: any) {
   const nodeId = useNodeId();

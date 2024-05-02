@@ -1,9 +1,9 @@
-import { InputText } from "primereact/inputtext";
 import { NodeWrapper } from "../NodeWrapper";
 import { Handle, Position, useNodeId, useReactFlow, useStore } from "reactflow";
 import clsx from "clsx";
 import cloneDeep from "lodash/cloneDeep";
 import { useEffect, useState } from "react";
+import { TextField } from "@/shared/components";
 
 export function InputNode({data}: any) {
   const nodeId = useNodeId();
@@ -31,7 +31,7 @@ export function InputNode({data}: any) {
   return (
     <NodeWrapper status={data.status} title="Prompt Input">
       <div className="relative py-4 px-4">
-        <InputText
+        <TextField
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Some prompt"

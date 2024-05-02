@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Handle, Position, useNodeId, useStore } from "reactflow";
 import { NodeWrapper } from "../NodeWrapper";
-import { ProgressSpinner } from "primereact/progressspinner";
 
 export function RemoveBackgroudNode({ data }: any) {
     const nodeId = useNodeId();
@@ -38,7 +37,7 @@ export function RemoveBackgroudNode({ data }: any) {
           <Handle type="source" position={Position.Right} />
           <div className="mr-4">Image</div>
         </div>
-        {data.status === "pending" && <ProgressSpinner />}
+        {/* {data.status === "pending" && <ProgressSpinner />} */}
         {data.result && (
           <>
             <div className="m-2 w-[420px] h-[300px] flex items-center justify-center bg-stone-200">
