@@ -1,5 +1,3 @@
-import { Button } from "primereact/button";
-
 import { DragEventHandler, useCallback, useEffect, useState } from "react";
 import ReactFlow, {
   Background,
@@ -23,6 +21,7 @@ import { GenerateImageNode } from "@/componets/replicate-nodes/GenerateImageNode
 import { RemoveBackgroudNode } from "@/componets/replicate-nodes/RemoveBackgroudNode";
 import { BecomeImageNode } from "@/componets/replicate-nodes/BecomeImageNode";
 import { FaceToStickerNode } from "@/componets/replicate-nodes/FaceToStickerNode";
+import { Button } from "@/shared/components";
 
 const nodeTypes = {
   image: ImageNode,
@@ -31,7 +30,7 @@ const nodeTypes = {
   result: ResultNode,
   removeBG: RemoveBackgroudNode,
   becomeImage: BecomeImageNode,
-  faceToSticker: FaceToStickerNode
+  faceToSticker: FaceToStickerNode,
 };
 
 function getDefaultNodeDataByType(type: string) {
@@ -43,7 +42,7 @@ function getDefaultNodeDataByType(type: string) {
     };
   }
 
-  if (type === "faceToSticker"){
+  if (type === "faceToSticker") {
     return {
       status: "init",
       inputType: "image",
@@ -68,12 +67,12 @@ function getDefaultNodeDataByType(type: string) {
       result: null,
     };
   }
-  if (type === "becomeImage"){
+  if (type === "becomeImage") {
     return {
       status: "init",
       inputType: ["image", "image"],
       outputType: "image",
-    }
+    };
   }
   return {};
 }
@@ -214,7 +213,7 @@ export default function Home() {
             <Background />
           </ReactFlow>
           <Button
-            size="small"
+            size="S"
             onClick={runQuery}
             className="absolute bottom-4 right-4"
           >
