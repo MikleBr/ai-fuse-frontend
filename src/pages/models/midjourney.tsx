@@ -1,6 +1,5 @@
 import {
   TextField,
-  Chip,
   Tabs,
   Typography,
   Card,
@@ -17,16 +16,15 @@ import {
 } from "@/shared/components/ui/Breadcrumb";
 import { CommonLayout } from "@/widgets/common-layout";
 import {
-  Bookmark,
-  Bot,
+  ChevronDown,
   Download,
-  Github,
   Heart,
-  Loader,
   Loader2,
   Network,
   Rocket,
+  Share,
   Share2,
+  Star,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -39,7 +37,7 @@ export default function Page() {
 
   return (
     <CommonLayout>
-      <div className="content-container">
+      <div className="w-full">
         <Breadcrumb className="mt-5">
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -51,35 +49,59 @@ export default function Page() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>PNGMaker AI</BreadcrumbPage>
+              <BreadcrumbPage>Midjourney</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
         <div className="w-full flex align-start justify-between mt-5">
-          <div className="flex flex-col">
-            <div className="mb-2 flex gap-1">
-              <Badge variant="secondary" className="text-xs py-0.5">
-                Generate image
-              </Badge>
-              <Badge variant="secondary" className="text-xs py-0.5">
-                Content Creators
-              </Badge>
-              <Badge variant="secondary" className="text-xs py-0.5">
-                Graphic Designers
-              </Badge>
-              <Badge variant="outline" className="text-xs py-0.5">
-                + 5 more
-              </Badge>
+          <div className="flex gap-4">
+            <Card className="w-32 h-32">
+              <img
+                className="w-full h-full object-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/2/24/Midjourney_Emblem.svg"
+              />
+            </Card>
+            <div className="flex flex-col">
+              <div className="mb-2 flex gap-1">
+                <Badge variant="secondary" className="text-xs py-0.5">
+                  Generate image
+                </Badge>
+                <Badge variant="secondary" className="text-xs py-0.5">
+                  Content Creators
+                </Badge>
+                <Badge variant="secondary" className="text-xs py-0.5">
+                  Graphic Designers
+                </Badge>
+                <Badge variant="outline" className="text-xs py-0.5">
+                  + 5 more
+                </Badge>
+              </div>
+              <div className="flex gap-2 items-end">
+                <Typography.Heading className="m-0" Component="h1" level={1}>
+                  Midjourney
+                </Typography.Heading>
+              </div>
+              <div className="flex mt-4 gap-10">
+                <div className="flex flex-col">
+                  <div className="text-sm text-muted-foreground">Rating</div>
+                  <div>4.87</div>
+                </div>
+                <div className="flex flex-col">
+                  <div className="text-sm text-muted-foreground">Type</div>
+                  <div>Text to Image</div>
+                </div>
+                <div className="flex flex-col">
+                  <div className="text-sm text-muted-foreground">
+                    Professions
+                  </div>
+                  <div>Design, Photo, and 3 more</div>
+                </div>
+                <div className="flex flex-col">
+                  <div className="text-sm text-muted-foreground">Developer</div>
+                  <div>Midjourney, Inc.</div>
+                </div>
+              </div>
             </div>
-            <div className="flex gap-2 items-end">
-              <Typography.Heading className="m-0" Component="h1" level={1}>
-                PNGMaker AI
-              </Typography.Heading>
-            </div>
-            <Typography.Paragraph className="mt-1 mb-0 block w-2/3">
-              Make a PNG From Text in Seconds. Create your transparent PNG in a
-              revolutionary way. Spend less time, achieve more creativity.
-            </Typography.Paragraph>
           </div>
           <div className="flex gap-2">
             <Button>
@@ -92,6 +114,9 @@ export default function Page() {
             </Button>
             <Button size="icon" variant="outline">
               <Heart className="w-5" strokeWidth={1.5} absoluteStrokeWidth />
+            </Button>
+            <Button size="icon" variant="outline">
+              <Share2 className="w-5" strokeWidth={1.5} absoluteStrokeWidth />
             </Button>
           </div>
         </div>
@@ -108,7 +133,7 @@ export default function Page() {
           <Tabs.TabItem tabKey="alternatives">Alternatives</Tabs.TabItem>
         </Tabs>
       </div>
-      <div className="content-container mt-4 mb-8">
+      <div className="w-full mt-4 mb-8">
         <Tabs.TabContent tabKey="overview" activeTab={activeTab}>
           <DescriptionTab />
         </Tabs.TabContent>
@@ -131,34 +156,41 @@ function DescriptionTab() {
     <div className="grid grid-cols-7 gap-10">
       <div className="col-span-4 flex flex-col">
         <Typography.Heading level={3} className="mt-0">
-          How to Make a Transparent PNG with pngmaker.ai?
+          Midjourney
         </Typography.Heading>
         <Typography.Paragraph>
-          Creating transparent PNG images with pngmaker.ai is simple and
-          efficient. Follow these steps to bring your ideas to life:
+          Midjourney is a generative artificial intelligence program and service
+          created and hosted by the San Francisco–based independent research lab
+          Midjourney, Inc. Midjourney generates images from natural language
+          descriptions, called prompts, similar to OpenAI's DALL-E and Stability
+          AI's Stable Diffusion. It is one of the technologies of the AI boom.
         </Typography.Paragraph>
-        <Typography.Heading level={4}>
-          Step 1: Input Your Idea
-        </Typography.Heading>
+        <Typography.Heading level={4}>History</Typography.Heading>
         <Typography.Paragraph>
-          Begin by typing a detailed description of the image you envision into
-          the input field. Be as specific as possible to ensure the best
-          results.
+          Midjourney, Inc. was founded in San Francisco, California, by David
+          Holz, previously a co-founder of Leap Motion. The Midjourney image
+          generation platform entered open beta on July 12, 2022. On March 14,
+          2022, the Midjourney Discord server launched with a request to post
+          high-quality photographs to Twitter and Reddit for systems training.
         </Typography.Paragraph>
-        <Typography.Heading level={4}>
-          Step 2: Wait for About 10 Seconds
-        </Typography.Heading>
+        <Typography.Heading level={4}>Uses</Typography.Heading>
         <Typography.Paragraph>
-          Once you submit your description, pngmaker.ai gets to work. In
-          approximately 10 seconds, our advanced AI algorithms will process your
-          request and generate your image.
+          Midjourney's founder, David Holz, told The Register that artists use
+          Midjourney for rapid prototyping of artistic concepts to show to
+          clients before starting work themselves.
         </Typography.Paragraph>
-        <Typography.Heading level={4}>
-          Step 3: Receive Your PNG Image
-        </Typography.Heading>
         <Typography.Paragraph>
-          After the brief wait, your PNG image will be ready. Review your new
-          transparent PNG to see if it meets your expectations.
+          The advertising industry has been quick to embrace AI tools such as
+          Midjourney, DALL-E, and Stable Diffusion, among others. The tools that
+          enable advertisers to create original content and brainstorm ideas
+          quickly are providing new opportunities, such as "custom ads created
+          for individuals, a new way to create special effects, or even making
+          e-commerce advertising more efficient", according to Ad Age.
+        </Typography.Paragraph>
+        <Typography.Paragraph>
+          Architects have described using the software to generate mood boards
+          for the early stages of projects, as an alternative to searching
+          Google Images.
         </Typography.Paragraph>
         <Typography.Heading level={3}>Not Satisfied?</Typography.Heading>
         <Typography.Paragraph>
@@ -170,20 +202,19 @@ function DescriptionTab() {
           unleash your creativity!
         </Typography.Paragraph>
       </div>
-      <Card className="col-span-3 self-start">
-        <Card.Head className="flex-row justify-between items-start">
+      <Card className="sticky top-4 col-span-3 self-start">
+        <Card.Head className="flex-row justify-between items-center">
           <div className="flex gap-4 items-center">
-            <img
-              className="w-12 h-12"
-              src="https://pngmaker.ai/_next/static/media/logo.4d883e09.webp"
-            />
+            <Card className="!rounded-md w-12 h-12">
+              <img
+                className="w-full h-full object-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/2/24/Midjourney_Emblem.svg"
+              />
+            </Card>
             <div>
               <Typography.Heading className="m-0" level={3}>
-                PNGMaker AI
+                Midjourney
               </Typography.Heading>
-              <Card.Description>
-                Make a PNG From Text in Seconds.
-              </Card.Description>
             </div>
           </div>
           <div className="flex gap-2 !m-0">
@@ -204,7 +235,7 @@ function DescriptionTab() {
               Graphic Designers
             </Badge>
             <Badge variant="secondary" className="text-xs py-0.5">
-              png
+              Photo
             </Badge>
             <Badge variant="secondary" className="text-xs py-0.5">
               Design
@@ -215,9 +246,7 @@ function DescriptionTab() {
           </div>
         </Card.Content>
         <Card.Content className="flex gap-2">
-          <Button size="S" variant="dark">
-            Visit site
-          </Button>
+          <Button size="S">Playground</Button>
           <Button size="S" variant="secondary">
             Share <Share2 className="ml-1 inline w-4" />
           </Button>
@@ -257,7 +286,7 @@ function PlaygroundTab() {
                 </Card.Description>
               </div>
               <Button
-                className="w-[240px]"
+                className="w-[180px]"
                 onClick={status === "loading" ? onAbort : onStart}
                 size="S"
                 variant={status === "loading" ? "error" : "primary"}
@@ -273,7 +302,7 @@ function PlaygroundTab() {
                   </>
                 ) : (
                   <>
-                    Abort generation
+                    Abort
                     <Loader2 className="ml-1 animation-rotate" />
                   </>
                 )}
@@ -301,20 +330,27 @@ function PlaygroundTab() {
             </Card.Content>
           </Card>
           <Card className="mt-4">
-            <Card.Head>
-              <Card.Title>Additional settings</Card.Title>
-              <Card.Description className="mt-1">
-                For expert use
-              </Card.Description>
+            <Card.Head className="flex flex-row items-start justify-between">
+              <div>
+                <Card.Title>Additional settings</Card.Title>
+                <Card.Description className="mt-1">
+                  For expert use
+                </Card.Description>
+              </div>
+              <Button size="icon" variant="ghost" className="!m-0">
+                <ChevronDown />
+              </Button>
             </Card.Head>
-            <Card.Content className="flex flex-col gap-4">
-              <TextField label="Seed" placeholder="Seed" />
-              <TextField
-                label="Temperature"
-                placeholder="Temperature"
-                value="0.5"
-              />
-            </Card.Content>
+            {null && (
+              <Card.Content className="flex flex-col gap-4">
+                <TextField label="Seed" placeholder="Seed" />
+                <TextField
+                  label="Temperature"
+                  placeholder="Temperature"
+                  value="0.5"
+                />
+              </Card.Content>
+            )}
           </Card>
         </div>
         <div className="sticky top-4 self-start col-span-2">
@@ -338,16 +374,14 @@ function PlaygroundTab() {
               />
             )}
           </div>
-          {status === "success" && (
-            <div className="mt-2 flex gap-2">
-              <Button>
-                Download image <Download className="ml-1 inline w-4" />
-              </Button>
-              <Button variant="secondary">
-                Share <Share2 className="ml-1 inline w-4" />
-              </Button>
-            </div>
-          )}
+          <div className="mt-2 flex gap-2">
+            <Button>
+              Download image <Download className="ml-1 inline w-4" />
+            </Button>
+            <Button variant="secondary">
+              Share result <Share2 className="ml-1 inline w-4" />
+            </Button>
+          </div>
         </div>
       </div>
     </>
