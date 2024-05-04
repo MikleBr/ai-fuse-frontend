@@ -18,6 +18,10 @@ const config: Config = {
         DEFAULT: "hsl(var(--secondary))",
         foreground: "hsl(var(--secondary-foreground))",
       },
+      dark: {
+        DEFAULT: "hsl(var(--dark))",
+        foreground: "hsl(var(--dark-foreground))",
+      },
       destructive: {
         DEFAULT: "hsl(var(--destructive) / <alpha-value>)",
         foreground: "hsl(var(--destructive-foreground) / <alpha-value>)",

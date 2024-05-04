@@ -2,7 +2,8 @@ import * as React from "react";
 import cn from "@/shared/utils/cn";
 
 const stylesByVariants = {
-    default: "bg-primary text-primary-foreground hover:bg-primary/90",
+    primary: "bg-primary text-primary-foreground hover:bg-primary/90",
+    dark: "bg-dark text-dark-foreground hover:bg-dark/90",
     error:
       "bg-destructive text-destructive-foreground hover:bg-destructive/90",
     outline:
@@ -20,17 +21,17 @@ const stylesBySize = {
 };
 
 type ButtonProps = {
-    variant?: 'default' | 'error' | 'outline' | 'secondary' | 'ghost' | 'link',
+    variant?: 'primary' | 'error' | 'outline' | 'secondary' | 'ghost' | 'link' | 'dark',
     size?: 'S' | 'M' | 'L' | 'icon'
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'default', size = 'M', ...props }, ref) => {
+  ({ className, variant = 'primary', size = 'M', ...props }, ref) => {
     // TOOD: Возможность Link
     return (
       <button
         className={cn(
-          "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+          "inline-flex active:scale-95 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
           stylesByVariants[variant],
           stylesBySize[size],
           className

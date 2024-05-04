@@ -21,126 +21,152 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/shared/components/ui/Breadcrumb";
-import { Bookmark, Bot, Github, Heart, Network, Rocket } from "lucide-react";
+import { CommonLayout } from "@/widgets/common-layout";
+import {
+  Bot,
+  Download,
+  Github,
+  Heart,
+  Network,
+  Rocket,
+  Share2,
+} from "lucide-react";
 import { useState } from "react";
 
 export default function Page() {
   const [activeTab, setActiveTab] = useState<string>("playground");
 
   return (
-    <>
-      <header className="w-full h-16 border-b border-b-muted">
-        <div className="content-container flex justify-between h-full items-center">
-          <nav className="flex items-center gap-6 h-full">
-            <div className="cursor-pointer text-foreground transition-colors hover:text-foreground">
-              Models
-            </div>
-            <div className="cursor-pointer text-muted-foreground transition-colors hover:text-foreground">
-              Pricing
-            </div>
-            <div className="cursor-pointer text-muted-foreground transition-colors hover:text-foreground">
-              Docs
-            </div>
-          </nav>
-          <div>
-            <TextField placeholder="Search models..." />
-            <div></div>
-          </div>
-        </div>
-      </header>
-      <div>
-        <div className="content-container">
-          <Breadcrumb className="mt-5">
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/models">Models</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>iordcalin/material-transfer</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-          <div className="w-full flex align-start justify-between mt-5">
-            <div className="flex flex-col">
-              <Typography.Heading className="m-0" level={1}>
-                <Bot
-                  className="inline h-8 w-8 mb-1"
-                  strokeWidth={1.7}
-                  absoluteStrokeWidth
-                />{" "}
-                iordcalin/material-transfer
-              </Typography.Heading>
-              <Typography.Paragraph>
-                Transfer a material from an image to a subject
-              </Typography.Paragraph>
-            </div>
-            <div className="flex gap-2">
-              <Button>
-                Try in flow{" "}
-                <Network
-                  className="ml-1 w-5"
-                  strokeWidth={1.7}
-                  absoluteStrokeWidth
-                />
-              </Button>
-              <Button size="icon" variant="outline">
-                <Heart className="w-5" strokeWidth={1.5} absoluteStrokeWidth />
-              </Button>
-            </div>
-          </div>
-          <div className="flex items-center mt-2 gap-2">
-            <Chip>Design</Chip>
-            <Chip variant="secondary">Images</Chip>
-            <Chip variant="outline">
-              <Github
-                className="mr-2 w-4"
-                strokeWidth={1.25}
+    <CommonLayout>
+      <div className="content-container">
+        <Breadcrumb className="mt-5">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/models">Models</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Kandinsky</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <div className="w-full flex align-start justify-between mt-5">
+          <div className="flex flex-col">
+            <div className="flex gap-2 items-end">
+              <Bot
+                className="h-8 w-8 mb-1"
+                strokeWidth={1.7}
                 absoluteStrokeWidth
               />
-              Source code
-            </Chip>
+              <Typography.Heading className="m-0" level={1}>
+                Kandinsky
+              </Typography.Heading>
+              <Chip
+                className="text-base mb-1 py-0 px-2"
+                variant="secondary"
+              >
+                v2.2
+              </Chip>
+            </div>
+            <Typography.Paragraph>
+              Multilingual text2image latent diffusion model
+            </Typography.Paragraph>
           </div>
-          <Tabs
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            className="mt-8"
-          >
-            <Tabs.TabItem tabKey="playground">Playground</Tabs.TabItem>
-            <Tabs.TabItem tabKey="examples">Examples</Tabs.TabItem>
-            <Tabs.TabItem tabKey="block">Block</Tabs.TabItem>
-          </Tabs>
+          <div className="flex gap-2">
+            <Button>
+              Try in flow{" "}
+              <Network
+                className="ml-1 w-5"
+                strokeWidth={1.7}
+                absoluteStrokeWidth
+              />
+            </Button>
+            <Button size="icon" variant="outline">
+              <Heart className="w-5" strokeWidth={1.5} absoluteStrokeWidth />
+            </Button>
+          </div>
         </div>
-        <div className="content-container mt-8">
-          <Tabs.TabContent tabKey="playground" activeTab={activeTab}>
-            <PlaygroundTab />
-          </Tabs.TabContent>
-          <Tabs.TabContent tabKey="examples" activeTab={activeTab}>
-            Examples
-          </Tabs.TabContent>
-          <Tabs.TabContent tabKey="block" activeTab={activeTab}>
-            Block
-          </Tabs.TabContent>
+        <div className="flex items-center gap-2">
+          <Chip size="S">Generate image</Chip>
+          <Chip variant={Chip.Variants.SECONDARY}>Images</Chip>
+          <Chip variant="outline">
+            <Github
+              className="mr-2 w-4"
+              strokeWidth={1.25}
+              absoluteStrokeWidth
+            />
+            Source code
+          </Chip>
         </div>
+        <Tabs
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          className="mt-8"
+        >
+          <Tabs.TabItem tabKey="description">Description</Tabs.TabItem>
+          <Tabs.TabItem tabKey="playground">Playground</Tabs.TabItem>
+          <Tabs.TabItem tabKey="examples">Examples</Tabs.TabItem>
+          <Tabs.TabItem tabKey="block">Block</Tabs.TabItem>
+        </Tabs>
       </div>
-    </>
+      <div className="content-container mt-8">
+        <Tabs.TabContent tabKey="description" activeTab={activeTab}>
+          <DescriptionTab />
+        </Tabs.TabContent>
+        <Tabs.TabContent tabKey="playground" activeTab={activeTab}>
+          <PlaygroundTab />
+        </Tabs.TabContent>
+        <Tabs.TabContent tabKey="examples" activeTab={activeTab}>
+          Examples
+        </Tabs.TabContent>
+        <Tabs.TabContent tabKey="block" activeTab={activeTab}>
+          Block
+        </Tabs.TabContent>
+      </div>
+    </CommonLayout>
+  );
+}
+
+function DescriptionTab() {
+  return (
+    <div className="max-w-[680px]">
+      <Typography.Heading level={2} Component="h2">
+        Kandinsky-2.2
+      </Typography.Heading>
+      <Typography.Paragraph Component="p">
+        Kandinsky 2.2 brings substantial improvements upon its predecessor,
+        Kandinsky 2.1, by introducing a new, more powerful image encoder -
+        CLIP-ViT-G and the ControlNet support.
+      </Typography.Paragraph>
+      <Typography.Paragraph Component="p">
+        The switch to CLIP-ViT-G as the image encoder significantly increases
+        the model’s capability to generate more aesthetic pictures and better
+        understand text, thus enhancing the model’s overall performance.
+      </Typography.Paragraph>
+      <Typography.Paragraph Component="p">
+        The addition of the ControlNet mechanism allows the model to effectively
+        control the process of generating images. This leads to more accurate
+        and visually appealing outputs and opens new possibilities for
+        text-guided image manipulation.
+      </Typography.Paragraph>
+    </div>
   );
 }
 
 function PlaygroundTab() {
   return (
     <>
-      <div className="grid pb-20 grid-cols-3 gap-4">
-        <div className="col-span-1">
-          <div className="flex w-full mb-2 gap-2">
+      <div className="grid pb-20 grid-cols-4  gap-4">
+        <div className="col-span-2">
+          <div className="flex w-full mb-4 gap-2">
             <Button size="M" variant="secondary">
               Reset Settings
             </Button>
-            <Button size="M" className="flex-1">
+            <Button size="M" variant="dark" className="flex-1">
               <Rocket
                 className="mr-1 h-4"
                 strokeWidth={1.5}
@@ -212,8 +238,22 @@ function PlaygroundTab() {
             </Card.Content>
           </Card>
         </div>
-        <div className="col-span-2 relative rounded-lg bg-muted/50 h-[calc(100vh-120px)]">
-          <Badge className="absolute top-2 right-2">Output</Badge>
+        <div className="sticky top-4 self-start col-span-2">
+          <div className="overflow-hidden w-full rounded-lg relative">
+            <img
+              className="w-full"
+              src="https://replicate.delivery/pbxt/Lca3IEjcKoJBBVS6ajROkK37sDzPsmjYxIcFzxPZp65wZzTE/out-0.png"
+            />
+            <Badge className="absolute top-2 right-2">Output</Badge>
+          </div>
+          <div className="mt-2 flex gap-2">
+            <Button>
+              Download image <Download className="ml-1 inline w-4" />
+            </Button>
+            <Button variant="secondary">
+              Share <Share2 className="ml-1 inline w-4" />
+            </Button>
+          </div>
         </div>
       </div>
     </>
