@@ -2,7 +2,7 @@ type FooterProps = {};
 
 export function Footer({}: FooterProps) {
   return (
-    <footer className="w-full  mt-auto">
+    <footer className="w-full mt-auto">
       <div className="w-full bg-dark py-6">
         <div className="content-container">
           <nav className="flex items-center gap-6 h-full">

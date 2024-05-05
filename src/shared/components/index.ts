@@ -8,3 +8,5 @@ export { Button } from "./ui/Button";
 export { Breadcrumb } from "./ui/Breadcrumb";
 export * from './ui/Accordion';
 export * from "./ui/Select";
+export * from "./ui/Tooltip";
+
