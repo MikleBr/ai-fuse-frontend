@@ -1,6 +1,6 @@
 import { Header } from "./Header";
 import { Footer } from "./Footer";
-import cn from "@/shared/utils/cn";
+import { cn } from "@/shared/lib/utils";
 
 type CommonLayoutProps = React.PropsWithChildren<{ withBanner?: boolean }>;
 
@@ -9,13 +9,13 @@ export function CommonLayout({
   withBanner = false,
 }: CommonLayoutProps) {
   return (
-    <main className="min-h-screen flex flex-col">
+    <main className="min-h-screen min-w-[320px] flex flex-col">
       <Header />
-      <main className="content-container grid grid-cols-4 gap-10">
+      <div className="content-container grid grid-cols-4 gap-10">
         <div
           className={cn(
             withBanner && "col-span-3",
-            !withBanner && "col-span-4",
+            !withBanner && "col-span-4"
           )}
         >
           {children}
@@ -32,7 +32,7 @@ export function CommonLayout({
             </div>
           </aside>
         )}
-      </main>
+      </div>
       <Footer />
     </main>
   );

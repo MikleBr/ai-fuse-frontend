@@ -51,7 +51,7 @@ export function Sidebar() {
   };
 
   return (
-    <Card className="rounded-xl gap-2 flex flex-col bg-gray-100 h-full">
+    <Card className="gap-2 rounded-none flex flex-col bg-gray-100 h-screen">
       <Card.Head className="pb-1">
         <Card.Title>Flow Blocks</Card.Title>
         <Card.Description>Common blocks for your flow</Card.Description>

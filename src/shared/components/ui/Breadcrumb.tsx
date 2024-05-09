@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
-import cn from "@/shared/utils/cn";
+import { cn } from "@/shared/lib/utils";
 
 const Breadcrumb = React.forwardRef<
   HTMLElement,

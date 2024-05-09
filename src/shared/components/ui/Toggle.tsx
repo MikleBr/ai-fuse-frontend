@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import * as TogglePrimitive from "@radix-ui/react-toggle";
-import cn from "@/shared/utils/cn";
+import { cn } from "@/shared/lib/utils";
 
 const stylesByVariants = {
   default: "bg-transparent",

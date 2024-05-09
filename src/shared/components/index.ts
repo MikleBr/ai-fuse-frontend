@@ -6,7 +6,7 @@ export { TextField } from "./ui/TextField";
 export { Badge } from "./ui/Badge";
 export { Button } from "./ui/Button";
 export { Breadcrumb } from "./ui/Breadcrumb";
-export * from './ui/Accordion';
+export { Modal } from "./Modal";
+export * from "./ui/Accordion";
 export * from "./ui/Select";
 export * from "./ui/Tooltip";
-

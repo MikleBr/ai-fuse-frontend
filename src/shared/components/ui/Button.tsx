@@ -1,5 +1,5 @@
 import * as React from "react";
-import cn from "@/shared/utils/cn";
+import { cn } from "@/shared/lib/utils";
 
 const stylesByVariants = {
     primary: "bg-primary text-primary-foreground hover:bg-primary/90",

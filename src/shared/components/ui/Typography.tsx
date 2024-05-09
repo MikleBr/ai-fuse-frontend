@@ -1,4 +1,4 @@
-import cn from "@/shared/utils/cn";
+import { cn } from "@/shared/lib/utils";
 import { ElementType, HTMLAttributes } from "react";
 
 type CommonTypographyProps = {

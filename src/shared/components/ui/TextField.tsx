@@ -1,4 +1,4 @@
-import cn from "@/shared/utils/cn";
+import { cn } from "@/shared/lib/utils";
 import { forwardRef, useId } from "react";
 
 type InputProps = {
@@ -7,7 +7,7 @@ type InputProps = {
   label?: string;
   error?: boolean;
   errorMessage?: string;
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">;
+} & React.InputHTMLAttributes<HTMLInputElement>;
 
 export const TextField = forwardRef<HTMLInputElement, InputProps>(
   (
@@ -44,7 +44,6 @@ export const TextField = forwardRef<HTMLInputElement, InputProps>(
           required={required}
           ref={ref}
           id={id || generatedId}
-          type="text"
           {...props}
         />
         {errorMessage && (
