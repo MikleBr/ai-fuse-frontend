@@ -14,7 +14,7 @@ import { NodeWrapper } from "@/componets/NodeWrapper";
 import { InputNode } from "@/componets/util-nodes/InputNode";
 import { ImageNode } from "@/componets/util-nodes/ImageNode";
 
-import { constructGraphs, getEndingNodes, runGraph } from "@/utils/formatGraph";
+import { constructGraphs, getEndingNodes, runGraph } from "@/app/formatGraph";
 import { cloneDeep } from "lodash";
 import { GenerateImageNode } from "@/componets/replicate-nodes/GenerateImageNode";
 import { RemoveBackgroudNode } from "@/componets/replicate-nodes/RemoveBackgroudNode";
