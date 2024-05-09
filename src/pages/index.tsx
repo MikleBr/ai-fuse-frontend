@@ -1,5 +1,3 @@
-import { CommonLayout } from "@/widgets/common-layout";
+import { Page } from "@/pages-flat/main";
 
-export default function Page() {
-  return <CommonLayout>Main landing page</CommonLayout>;
-}
+export default Page

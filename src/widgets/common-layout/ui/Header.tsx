@@ -19,8 +19,8 @@ const links = [
     label: "Тарифы",
   },
   {
-    href: "about",
-    label: "О нас",
+    href: "/documentation",
+    label: "Документация",
   },
 ];
 

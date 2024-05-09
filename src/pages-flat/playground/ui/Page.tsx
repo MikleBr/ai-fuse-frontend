@@ -63,11 +63,6 @@ function getDefaultNodeDataByType(type: string) {
       outputType: "image",
     };
   }
-  if (type === "result") {
-    return {
-      result: null,
-    };
-  }
   if (type === "becomeImage") {
     return {
       status: "init",
@@ -206,7 +201,7 @@ export function Page() {
           fitView
           snapToGrid
         >
-          <Background />
+          {/* <Background /> */}
         </ReactFlow>
         <Button
           size="S"

@@ -28,9 +28,16 @@ export function Page() {
       </Breadcrumb>
       <div className="mt-5 gap-8 grid grid-cols-4">
         <Filters className="col-span-1 self-start" />
-        <div className="col-span-3">
+        <div className="col-span-3 pb-10">
           <TopFilters className="mb-4" />
           <div className="gap-4 grid grid-cols-3">
+            <ModelCard />
+            <ModelCard />
+            <ModelCard />
+            <ModelCard />
+            <ModelCard />
+            <ModelCard />
+            <ModelCard />
             <ModelCard />
             <ModelCard />
             <ModelCard />
