@@ -201,7 +201,7 @@ export function Page() {
           fitView
           snapToGrid
         >
-          {/* <Background /> */}
+          <Background />
         </ReactFlow>
         <Button
           size="S"
