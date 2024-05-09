@@ -3,7 +3,7 @@ import { MountTransition } from "./MountTransition";
 
 import { useLockBodyScroll } from "../lib/hooks/useLockBodyScroll";
 
-import { Card } from "./ui/Card";
+import { Card } from "./Card";
 import { useEffect } from "react";
 import { cn } from "../lib/utils";
 

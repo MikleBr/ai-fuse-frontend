@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/shared/components";
-import { Toggle } from "@/shared/components/ui/Toggle";
+import { Toggle } from "@/shared/components/Toggle";
 import { cn } from "@/shared/lib/utils";
 import {
   ChevronDown,

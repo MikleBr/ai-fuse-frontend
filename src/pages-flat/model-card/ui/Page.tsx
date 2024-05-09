@@ -6,7 +6,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/shared/components/ui/Breadcrumb";
+} from "@/shared/components/Breadcrumb";
 import { CommonLayout } from "@/widgets/common-layout";
 import { CardHead } from "./CardHead";
 import { CardActions } from "./CardActions";
