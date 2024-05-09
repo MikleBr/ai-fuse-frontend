@@ -3,6 +3,7 @@ import { ModelCard } from "@/pages-flat/models/ui/ModelCard";
 import { Button, Card, Typography } from "@/shared/components";
 import { CommonLayout } from "@/widgets/common-layout";
 import ReactFlow, { Background, BackgroundVariant } from "reactflow";
+import { FlowBlock } from "./FlowBlock";
 
 type PageProps = {};
 
@@ -35,32 +36,7 @@ export function Page({}: PageProps) {
           </div>
         </div>
       </section>
-      <section className="py-16 bg-white">
-        <div className="content-container flex gap-4">
-          <div className="w-2/5 flex flex-col">
-            <Typography.Heading level={1} className="m-0">
-              Объединяйте нейросети
-              <br />с помощью блоков
-            </Typography.Heading>
-            <Typography.Paragraph className="my-5">
-              Мы разработали целое нихуя. Создавайте, делитесь
-              и&nbsp;используйте блоки внутри комьюнити.
-            </Typography.Paragraph>
-            <Button size="L" className="w-fit">
-              Узнать больше
-            </Button>
-          </div>
-          <div className="w-3/5">
-            <ReactFlow className="bg-stone-200 !h-[600px] rounded-xl">
-              <Background
-                size={6}
-                variant={BackgroundVariant.Cross}
-                color="#c3c3c3"
-              />
-            </ReactFlow>
-          </div>
-        </div>
-      </section>
+      <FlowBlock />
       <section className="py-16">
         <div className="content-container flex gap-8">
           <div className="w-1/2 grid grid-cols-2 gap-4">
@@ -145,9 +121,7 @@ export function Page({}: PageProps) {
                   <li>Позиция пять</li>
                 </ul>
                 <div>5 000 руб/мес</div>
-                <Button className="w-full mt-5">
-                    Подключить
-                </Button>
+                <Button className="w-full mt-5">Подключить</Button>
               </Card.Content>
             </Card>
           </div>
