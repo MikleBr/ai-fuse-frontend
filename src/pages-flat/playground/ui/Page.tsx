@@ -10,16 +10,16 @@ import ReactFlow, {
   useStore,
 } from "reactflow";
 
-import { NodeWrapper } from "@/componets/NodeWrapper";
-import { InputNode } from "@/componets/util-nodes/InputNode";
-import { ImageNode } from "@/componets/util-nodes/ImageNode";
+import { NodeWrapper } from "@/shared/ReactFlowNodes/NodeWrapper";
+import { InputNode } from "@/shared/ReactFlowNodes/util-nodes/InputNode";
+import { ImageNode } from "@/shared/ReactFlowNodes/util-nodes/ImageNode";
 
 import { constructGraphs, getEndingNodes, runGraph } from "@/app/formatGraph";
 import { cloneDeep } from "lodash";
-import { GenerateImageNode } from "@/componets/replicate-nodes/GenerateImageNode";
-import { RemoveBackgroudNode } from "@/componets/replicate-nodes/RemoveBackgroudNode";
-import { BecomeImageNode } from "@/componets/replicate-nodes/BecomeImageNode";
-import { FaceToStickerNode } from "@/componets/replicate-nodes/FaceToStickerNode";
+import { GenerateImageNode } from "@/shared/ReactFlowNodes/replicate-nodes/GenerateImageNode";
+import { RemoveBackgroudNode } from "@/shared/ReactFlowNodes/replicate-nodes/RemoveBackgroudNode";
+import { BecomeImageNode } from "@/shared/ReactFlowNodes/replicate-nodes/BecomeImageNode";
+import { FaceToStickerNode } from "@/shared/ReactFlowNodes/replicate-nodes/FaceToStickerNode";
 import { Button } from "@/shared/components";
 import { Sidebar } from "./Sidebar";
 import { Toolbar } from "./Toolbar";
