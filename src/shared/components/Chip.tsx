@@ -13,7 +13,7 @@ const chipVariants = {
     "border-transparent bg-secondary text-secondary-foreground ",
   [Variants.OUTLINE]: "text-foreground",
   [Variants.ERROR]:
-    "border-transparent bg-destructive text-destructive-foreground text-white shadow",
+    "border-transparent bg-destructive text-destructive-foreground shadow",
 };
 
 const stylesBySize = {

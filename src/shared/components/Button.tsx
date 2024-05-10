@@ -4,7 +4,7 @@ import { cn } from "@/shared/lib/utils";
 const stylesByVariants = {
     primary: "bg-primary text-primary-foreground hover:bg-primary/90",
     dark: "bg-dark text-dark-foreground hover:bg-dark/90",
-    error:
+    destructive:
       "bg-destructive text-destructive-foreground hover:bg-destructive/90",
     outline:
       "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
@@ -21,7 +21,7 @@ const stylesBySize = {
 };
 
 type ButtonProps = {
-    variant?: 'primary' | 'error' | 'outline' | 'secondary' | 'ghost' | 'link' | 'dark',
+    variant?: 'primary' | 'outline' | 'secondary' | 'ghost' | 'link' | 'dark' | 'destructive',
     size?: 'S' | 'M' | 'L' | 'icon'
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 

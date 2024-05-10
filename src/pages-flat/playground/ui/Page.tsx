@@ -1,27 +1,73 @@
-import { useEffect, useState } from "react";
 import ReactFlow, {
   Background,
-  Edge,
-  Handle,
   Node,
-  Position,
+  addEdge,
   useEdgesState,
-  useNodeId,
   useNodesState,
-  useStore,
 } from "reactflow";
 
-import { NodeWrapper } from "@/shared/ReactFlowNodes/NodeWrapper";
-import { Button } from "@/shared/components";
 import { Sidebar } from "./Sidebar";
 import { Toolbar } from "./Toolbar";
 import { TestNode } from "@/shared/ReactFlowNodes/TestNode";
+import { NodeData } from "@/shared/ReactFlowNodes/types";
+import { useCallback } from "react";
+import { getReversedGraph } from "@/shared/ReactFlowNodes/formatGraph";
+import { GraphContextProvider } from "@/shared/ReactFlowNodes/GraphContext";
+import { cloneDeep } from "lodash";
+import example from "/public/Pngmaker.png";
 
-const initialNodes: Node[] = [
+const initialNodes: Node<NodeData>[] = [
   {
     id: "midjourney-node",
     data: {
-      type: "midjourney",
+      meta: {
+        title: "Midjourney",
+      },
+      inputs: [
+        {
+          label: "Промпт",
+          type: "text",
+        },
+        {
+          label: "Начальное изображение",
+          type: "image",
+        },
+      ],
+      outputs: [
+        {
+          label: "Изображение 1",
+          type: "image",
+        },
+        {
+          label: "Изображение 2",
+          type: "image",
+        },
+        {
+          label: "Изображение 3",
+          type: "image",
+        },
+        {
+          label: "Изображение 4",
+          type: "image",
+        },
+      ],
+      params: [
+        {
+          label: "Исключающий промпт",
+          type: "text",
+        },
+        {
+          label: "Temperature",
+          type: "text",
+        },
+        {
+          label: "Seed",
+          type: "text",
+        },
+      ],
+      result: {
+        type: "images",
+      },
     },
     type: "custom",
     position: {
@@ -32,49 +78,62 @@ const initialNodes: Node[] = [
   {
     id: "combine-images",
     data: {
-      type: "combine-images",
+      meta: {
+        title: "Объединить изображения",
+      },
+      inputs: [
+        {
+          label: "Изображения",
+          type: "images",
+        },
+      ],
+      outputs: [
+        {
+          label: "Изображение",
+          type: "image",
+        },
+      ],
+      params: [],
+      result: {
+        type: "image",
+      },
     },
     type: "custom",
     position: {
-      x: 400,
-      y: 100,
+      x: 450,
+      y: 250,
     },
   },
   {
     id: "remove-bg-node",
     data: {
-      type: "remove-bg",
+      meta: {
+        title: "Удалить фон",
+      },
+      inputs: [
+        {
+          id: "remove-bg-node-input",
+          label: "Изображения",
+          type: "image",
+        },
+      ],
+      outputs: [
+        {
+          id: "remove-bg-node-output",
+          label: "Изображение",
+          type: "image",
+        },
+      ],
+      params: [],
+      result: {
+        type: "image",
+      },
     },
     type: "custom",
     position: {
-      x: 800,
-      y: 200,
+      x: 900,
+      y: 100,
     },
-  },
-];
-
-const initialEdges: Edge[] = [
-  {
-    id: "1",
-    source: "midjourney-node",
-    sourceHandle: "imageOutput_0",
-    target: "combine-images",
-    targetHandle: "imageInput",
-    animated: true,
-  },
-  {
-    id: "2",
-    source: "midjourney-node",
-    sourceHandle: "imageOutput_1",
-    target: "combine-images",
-    targetHandle: "imageInput",
-    animated: true,
-  },
-  {
-    id: "3",
-    source: "combine-images",
-    target: "remove-bg-node",
-    animated: true,
   },
 ];
 
@@ -82,95 +141,136 @@ const nodeTypes = {
   custom: TestNode,
 };
 
-let id = 0;
-const getId = () => `dndnode_${id++}`;
-
 export function Page() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
-  return (
-    <div className="w-screen h-screen pt-7 flex relative">
-      <Toolbar />
-      <Sidebar />
-      <div className="bg-stone-100 h-full flex-1">
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          nodeTypes={nodeTypes}
-          maxZoom={1}
-          edgesFocusable
-          edgesUpdatable
-          nodesFocusable
-          fitView
-          snapToGrid
-        >
-          <Background />
-        </ReactFlow>
-        <Button size="S" className="absolute bottom-4 right-4">
-          Запустить блок
-        </Button>
-      </div>
-    </div>
+  const onConnect = useCallback(
+    (params: any) => setEdges((eds) => addEdge(params, eds)),
+    []
   );
-}
 
-function ResultNode({ data }: any) {
-  const nodeId = useNodeId();
+  const runBlock = (resultType: NodeData["result"]["type"]) => () => {
+    return new Promise((res, rej) => {
+      setTimeout(() => {
+        if (resultType === "image") {
+          res({
+            image: example.src,
+          });
+        }
+        if (resultType === "images") {
+          res({
+            images: [example.src, example.src, example.src, example.src],
+          });
+        }
+        if (resultType === "text") {
+          res({
+            text: "Hello, world!",
+          });
+        }
 
-  const [resultType, setResultType] = useState<string | null>(null);
+        rej("");
+      }, 2000);
+    });
+  };
 
-  const getNodes = useStore((store) => store.getNodes);
-
-  const targetEdge = useStore((s) => s.edges.find((e) => e.target === nodeId));
-
-  useEffect(() => {
-    if (targetEdge) {
-      const nodes = getNodes();
-      const sourceNode = nodes.find((node) => node.id === targetEdge.source);
-      if (sourceNode) {
-        setResultType(sourceNode.data.outputType);
+  const nodePending = (node: Node<NodeData>, inputData: any) => {
+    setNodes((nodes) => {
+      const updatedNodeIndex = nodes.findIndex((nd) => nd.id === node.id);
+      if (updatedNodeIndex !== -1) {
+        const updatedNode = cloneDeep(nodes[updatedNodeIndex]);
+        updatedNode.data.status = "pending";
+        const newNodes = [...nodes];
+        newNodes[updatedNodeIndex] = updatedNode;
+        return newNodes;
       }
-    } else {
-      setResultType(null);
-    }
-  }, [targetEdge]);
+      return nodes;
+    });
+  };
+  const nodeSuccess = (node: Node<NodeData>, data: any) => {
+    setNodes((nodes) => {
+      const updatedNodeIndex = nodes.findIndex((nd) => nd.id === node.id);
+      if (updatedNodeIndex !== -1) {
+        const updatedNode = cloneDeep(nodes[updatedNodeIndex]);
+        updatedNode.data.result.data = data;
+
+        updatedNode.data.status = "success";
+        const newNodes = [...nodes];
+        newNodes[updatedNodeIndex] = updatedNode;
+        return newNodes;
+      }
+      return nodes;
+    });
+  };
+  const nodeError = (node: Node<NodeData>, error: unknown) => {
+    setNodes((nodes) => {
+      const updatedNodeIndex = nodes.findIndex((nd) => nd.id === node.id);
+      if (updatedNodeIndex !== -1) {
+        const updatedNode = cloneDeep(nodes[updatedNodeIndex]);
+        updatedNode.data.status = "error";
+        const newNodes = [...nodes];
+        newNodes[updatedNodeIndex] = updatedNode;
+        return newNodes;
+      }
+      return nodes;
+    });
+  };
+
+  const onRunNode = (nodeId: string) => {
+    const { graph: reversedGraph } = getReversedGraph(nodes, edges);
+
+    const runNode = async (nodeId: string): Promise<any> => {
+      const node = nodes.find((node) => node.id === nodeId);
+      if (!node) throw Error("Хуевый у тебя граф получился");
+      // FIXME какая епта || ''
+      const func = runBlock(node.data.result.type);
+
+      const nodeDeps = reversedGraph[nodeId];
+
+      const depsResultPromise = nodeDeps.map((nodeId) => {
+        return runNode(nodeId);
+      });
+
+      const depsResult = await Promise.all(depsResultPromise);
+
+      nodePending(node, depsResult);
+
+      try {
+        const nodeResult = await func();
+        nodeSuccess(node, nodeResult);
+        return nodeResult;
+      } catch (error) {
+        nodeError(node, error);
+      }
+    };
+
+    runNode(nodeId);
+  };
 
   return (
-    <NodeWrapper status={data.status} title="Result">
-      <div className="px-4 py-2 bg-stone-200 text-stone-800 w-full flex justify-center">
-        Inputs
-      </div>
-      <div className="relative py-4">
-        <Handle
-          type="target"
-          onConnect={console.log}
-          className="flex"
-          position={Position.Left}
-        />
-        <div className="ml-4">
-          Result: {resultType ? resultType : "No Result Type"}
+    <GraphContextProvider runNode={onRunNode}>
+      <div className="w-screen h-screen pt-12 flex relative">
+        <Toolbar />
+        <Sidebar />
+        <div className="bg-stone-100 h-full flex-1">
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            nodeTypes={nodeTypes}
+            onConnect={onConnect}
+            maxZoom={1}
+            edgesFocusable
+            edgesUpdatable
+            nodesFocusable
+            fitView
+            snapToGrid
+          >
+            <Background />
+          </ReactFlow>
         </div>
-        {resultType === "image" && data.result && (
-          <>
-            <div className="m-2 w-[420px] h-[300px] flex items-center justify-center aspect-video bg-stone-200">
-              <img src={data.result} className="object-contain w-full h-full" />
-            </div>
-            <a
-              href={data.result}
-              className="ml-2 text-blue-400"
-              target="_blank"
-            >
-              Download
-            </a>
-          </>
-        )}
-        {resultType === "image" && !data.result && (
-          <div className="m-2 w-[420px] h-[300px] flex items-center justify-center aspect-video bg-stone-200" />
-        )}
       </div>
-    </NodeWrapper>
+    </GraphContextProvider>
   );
 }
