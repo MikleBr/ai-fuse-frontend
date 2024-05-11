@@ -24,7 +24,9 @@ export function TextHandler({ id, label }: TextHandlerProps) {
         })}
         position={Position.Right}
       />
-      {label}
+      <span>
+      <span className="text-xs text-muted-foreground">(текст)</span> {label}
+      </span>
     </div>
   );
 }

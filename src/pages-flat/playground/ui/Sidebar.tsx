@@ -1,48 +1,34 @@
-import { Button, Card } from "@/shared/components";
+import { Badge, Button, Card } from "@/shared/components";
 import { cn } from "@/shared/lib/utils";
 import { ArrowLeft } from "lucide-react";
 import { DragEvent, useState } from "react";
 
-const commonBlocks: { type: string; title: string }[] = [
+const availableBlocks: { name: string; title: string; disabled?: boolean }[] = [
   {
-    title: "Text",
-    type: "text",
+    name: 'midjourney-prompt-gen',
+    title: 'Генератор промптов для Midjourney'
   },
   {
-    title: "Image",
-    type: "image",
+    title: "Midjourney",
+    name: "midjourney",
   },
   {
-    title: "Result",
-    type: "result",
+    title: "Удалить фон",
+    name: "remove-bg",
   },
-];
-
-const availableBlocks: { type: string; title: string; cost: number }[] = [
+  {
+    title: "Объединить изображения",
+    name: "combine-images",
+  },
   {
     title: "Chat GPT",
-    cost: 1,
-    type: "chatGPT",
+    name: "chatGPT",
+    disabled: true,
   },
   {
-    title: "Generate Image",
-    cost: 10,
-    type: "generateImage",
-  },
-  {
-    title: "fofr/become-image",
-    cost: 5,
-    type: "becomeImage",
-  },
-  {
-    title: "fofr/face-to-sticker",
-    cost: 5,
-    type: "faceToSticker",
-  },
-  {
-    title: "Remove Background",
-    cost: 5,
-    type: "removeBG",
+    title: "Ракетами по хохлам",
+    name: "chatGPT",
+    disabled: true,
   },
 ];
 
@@ -69,31 +55,13 @@ export function Sidebar({ className }: SidebarProps) {
       <Button
         variant="ghost"
         size="icon"
-        className={cn('absolute right-3 top-1', collapsed && 'right-1')}
+        className={cn("absolute right-3 top-1", collapsed && "right-1")}
         onClick={() => setCollapsed((prev) => !prev)}
       >
-        <ArrowLeft className={cn(collapsed && 'rotate-180')} />
+        <ArrowLeft className={cn(collapsed && "rotate-180")} />
       </Button>
       {!collapsed && (
         <div className="min-w-[280px]">
-          <Card.Head className="pb-1">
-            <div>
-              <Card.Title>Flow Blocks</Card.Title>
-              <Card.Description>Common blocks for your flow</Card.Description>
-            </div>
-          </Card.Head>
-          <Card.Content className="pb-0 flex flex-col gap-2">
-            {commonBlocks.map((block, index) => (
-              <div
-                draggable
-                onDragStart={(event) => onDragStart(event, block.type)}
-                className="bg-white border border-stone-200 after:cursor-grabbing cursor-grab rounded-md w-full p-2 flex justify-between"
-                key={index}
-              >
-                <p>{block.title}</p>
-              </div>
-            ))}
-          </Card.Content>
           <Card.Head className="pb-1">
             <Card.Title>AI Blocks</Card.Title>
             <Card.Description>Main AI blocks</Card.Description>
@@ -101,12 +69,19 @@ export function Sidebar({ className }: SidebarProps) {
           <Card.Content className="flex flex-col gap-2">
             {availableBlocks.map((block, index) => (
               <div
-                draggable
-                onDragStart={(event) => onDragStart(event, block.type)}
-                className="bg-white border border-stone-200 after:cursor-grabbing cursor-grab rounded-md w-full p-2 flex justify-between"
+                draggable={!block.disabled}
+                onDragStart={(event) =>
+                  !block.disabled && onDragStart(event, block.name)
+                }
+                className={cn(
+                  "bg-white border border-stone-200 rounded-md w-full p-2 flex justify-between",
+                  !block.disabled && "after:cursor-grabbing cursor-grab",
+                  block.disabled && "bg-muted text-muted-foreground"
+                )}
                 key={index}
               >
                 <p>{block.title}</p>
+                {block.disabled && <Badge>Premium</Badge>}
               </div>
             ))}
           </Card.Content>

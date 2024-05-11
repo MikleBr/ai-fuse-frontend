@@ -28,7 +28,9 @@ export function TextHandler({ id, label }: TextHandlerProps) {
         position={Position.Left}
       />
       <div className="flex flex-col">
-        {label}
+        <span>
+          {label} <span className="text-xs text-muted-foreground">(текст)</span>
+        </span>
         {!isConnected && <TextField placeholder={label} />}
       </div>
     </div>

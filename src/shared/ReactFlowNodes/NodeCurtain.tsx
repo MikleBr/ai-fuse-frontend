@@ -23,11 +23,11 @@ export function NodeCurtain({ className = "", open, children }: NodeCurtainProps
                   className={cn(
                     "fixed shadow z-[8] top-12 right-0 h-[calc(100vh-48px)] transition-all duration-300 bg-white w-[320px]",
                     className,
-                    {
-                      "opacity-0 translate-x-full": 
-                        entering || exiting,
-                      "opacity-100 translate-x-0": entered,
-                    }
+                    // {
+                    //   "opacity-0 translate-x-full": 
+                    //     entering || exiting,
+                    //   "opacity-100 translate-x-0": entered,
+                    // }
                   )}
                 >
                   {children}

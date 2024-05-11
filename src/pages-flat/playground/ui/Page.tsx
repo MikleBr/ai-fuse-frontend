@@ -1,6 +1,7 @@
 import ReactFlow, {
   Background,
   Node,
+  ReactFlowInstance,
   addEdge,
   useEdgesState,
   useNodesState,
@@ -10,144 +11,66 @@ import { Sidebar } from "./Sidebar";
 import { Toolbar } from "./Toolbar";
 import { TestNode } from "@/shared/ReactFlowNodes/TestNode";
 import { NodeData } from "@/shared/ReactFlowNodes/types";
-import { useCallback } from "react";
+import { DragEventHandler, useCallback, useState } from "react";
 import { getReversedGraph } from "@/shared/ReactFlowNodes/formatGraph";
 import { GraphContextProvider } from "@/shared/ReactFlowNodes/GraphContext";
 import { cloneDeep } from "lodash";
 import example from "/public/Pngmaker.png";
-
-const initialNodes: Node<NodeData>[] = [
-  {
-    id: "midjourney-node",
-    data: {
-      meta: {
-        title: "Midjourney",
-      },
-      inputs: [
-        {
-          label: "Промпт",
-          type: "text",
-        },
-        {
-          label: "Начальное изображение",
-          type: "image",
-        },
-      ],
-      outputs: [
-        {
-          label: "Изображение 1",
-          type: "image",
-        },
-        {
-          label: "Изображение 2",
-          type: "image",
-        },
-        {
-          label: "Изображение 3",
-          type: "image",
-        },
-        {
-          label: "Изображение 4",
-          type: "image",
-        },
-      ],
-      params: [
-        {
-          label: "Исключающий промпт",
-          type: "text",
-        },
-        {
-          label: "Temperature",
-          type: "text",
-        },
-        {
-          label: "Seed",
-          type: "text",
-        },
-      ],
-      result: {
-        type: "images",
-      },
-    },
-    type: "custom",
-    position: {
-      x: 0,
-      y: 0,
-    },
-  },
-  {
-    id: "combine-images",
-    data: {
-      meta: {
-        title: "Объединить изображения",
-      },
-      inputs: [
-        {
-          label: "Изображения",
-          type: "images",
-        },
-      ],
-      outputs: [
-        {
-          label: "Изображение",
-          type: "image",
-        },
-      ],
-      params: [],
-      result: {
-        type: "image",
-      },
-    },
-    type: "custom",
-    position: {
-      x: 450,
-      y: 250,
-    },
-  },
-  {
-    id: "remove-bg-node",
-    data: {
-      meta: {
-        title: "Удалить фон",
-      },
-      inputs: [
-        {
-          id: "remove-bg-node-input",
-          label: "Изображения",
-          type: "image",
-        },
-      ],
-      outputs: [
-        {
-          id: "remove-bg-node-output",
-          label: "Изображение",
-          type: "image",
-        },
-      ],
-      params: [],
-      result: {
-        type: "image",
-      },
-    },
-    type: "custom",
-    position: {
-      x: 900,
-      y: 100,
-    },
-  },
-];
+import { getNodeDataByName } from "@/shared/ReactFlowNodes/getNodeDataByName";
 
 const nodeTypes = {
   custom: TestNode,
 };
 
+let count = 0;
+const getId = () => {
+  count++;
+  return `custom-node-id_${count}`;
+};
+
 export function Page() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [reactFlowInstance, setReactFlowInstance] =
+    useState<ReactFlowInstance | null>(null);
 
   const onConnect = useCallback(
     (params: any) => setEdges((eds) => addEdge(params, eds)),
     []
+  );
+
+  const onDragOver = useCallback<DragEventHandler<HTMLDivElement>>((event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+  }, []);
+
+  const onDrop = useCallback(
+    (event: any) => {
+      event.preventDefault();
+
+      if (!reactFlowInstance) return;
+
+      const modelName = event.dataTransfer.getData("application/reactflow");
+
+      if (typeof modelName === "undefined" || !modelName) {
+        return;
+      }
+
+      const position = reactFlowInstance.screenToFlowPosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+
+      const newNode = {
+        id: getId(),
+        type: "custom",
+        position,
+        data: getNodeDataByName(modelName),
+      };
+
+      setNodes((nds) => nds.concat(newNode));
+    },
+    [reactFlowInstance]
   );
 
   const runBlock = (resultType: NodeData["result"]["type"]) => () => {
@@ -264,8 +187,11 @@ export function Page() {
             edgesFocusable
             edgesUpdatable
             nodesFocusable
+            onInit={setReactFlowInstance}
             fitView
             snapToGrid
+            onDrop={onDrop}
+            onDragOver={onDragOver}
           >
             <Background />
           </ReactFlow>

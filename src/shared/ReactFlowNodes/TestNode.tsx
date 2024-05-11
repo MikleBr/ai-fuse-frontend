@@ -54,6 +54,7 @@ function TestNodeComponent(props: NodeProps<NodeData>) {
         variant={inProgress ? "destructive" : "primary"}
         onClick={(e) => {
           e.stopPropagation();
+          e.preventDefault();
           runNode(id);
         }}
         size="icon"
