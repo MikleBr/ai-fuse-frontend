@@ -1,5 +1,5 @@
-import { memo } from "react";
-import { NodeProps } from "reactflow";
+import { memo, useState } from "react";
+import { NodeProps, useStore } from "reactflow";
 import { Button, TextField, Typography } from "../components";
 import { Play, XIcon } from "lucide-react";
 import { NodeWrapper } from "./node-utils/NodeWrapper";
@@ -9,6 +9,7 @@ import { TargetHandler } from "./node-utils/target-handlers/Handler";
 import { NodeCurtain } from "./NodeCurtain";
 import { useGraphContext } from "./GraphContext";
 import { NodeResult } from "./NodeResult";
+import { cloneDeep } from "lodash";
 
 function TestNodeComponent(props: NodeProps<NodeData>) {
   // Так нужно
@@ -49,18 +50,19 @@ function TestNodeComponent(props: NodeProps<NodeData>) {
           </div>
         </>
       )}
-      <Button
-        className="ml-2 mb-2"
-        variant={inProgress ? "destructive" : "primary"}
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          runNode(id);
-        }}
-        size="icon"
-      >
-        {inProgress ? <XIcon /> : <Play />}
-      </Button>
+      <div className="px-2 pb-2 flex gap-2 items-center">
+        <Button
+          variant={inProgress ? "destructive" : "primary"}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            runNode(id);
+          }}
+          size="icon"
+        >
+          {inProgress ? <XIcon /> : <Play />}
+        </Button>
+      </div>
       <NodeCurtain open={selected} className="flex flex-col justify-between">
         <div>
           <Typography.Heading level={4} className="m-2 block">

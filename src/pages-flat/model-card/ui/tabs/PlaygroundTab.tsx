@@ -54,7 +54,7 @@ export function PlaygroundTab() {
                 className="w-[180px]"
                 onClick={status === "loading" ? onAbort : onStart}
                 size="S"
-                variant={status === "loading" ? "error" : "primary"}
+                variant={status === "loading" ? "destructive" : "primary"}
               >
                 {status !== "loading" ? (
                   <>
