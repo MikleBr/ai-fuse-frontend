@@ -3,7 +3,107 @@
 import { NodeData } from "./types";
 
 const nodes: Record<string, NodeData> = {
-  'midjourney-prompt-gen': {
+  a: {
+    meta: {
+      title: "1 text - 1 text",
+    },
+    inputs: [
+      {
+        label: "Text",
+        type: "text",
+      },
+    ],
+    outputs: [
+      {
+        label: "Text",
+        type: "text",
+      },
+    ],
+    params: [],
+    result: {
+      type: "text",
+    },
+  },
+  b: {
+    meta: {
+      title: "2 text - 1 text",
+    },
+    inputs: [
+      {
+        label: "Text 1",
+        type: "text",
+      },
+      {
+        label: "Text 2",
+        type: "text",
+      },
+    ],
+    outputs: [
+      {
+        label: "Text",
+        type: "text",
+      },
+    ],
+    params: [],
+    result: {
+      type: "text",
+    },
+  },
+  c: {
+    meta: {
+      title: "1 text - 2 text",
+    },
+    inputs: [
+      {
+        label: "Text 1",
+        type: "text",
+      },
+    ],
+    outputs: [
+      {
+        label: "Text 1",
+        type: "text",
+      },
+      {
+        label: "Text 2",
+        type: "text",
+      },
+    ],
+    params: [],
+    result: {
+      type: "text",
+    },
+  },
+  d: {
+    meta: {
+      title: "2 text - 2 text",
+    },
+    inputs: [
+      {
+        label: "Text 1",
+        type: "text",
+      },
+      {
+        label: "Text 2",
+        type: "text",
+      },
+    ],
+    outputs: [
+      {
+        label: "Text 1",
+        type: "text",
+      },
+      {
+        label: "Text 2",
+        type: "text",
+      },
+    ],
+    params: [],
+    result: {
+      type: "text",
+    },
+  },
+  "midjourney-prompt-gen": {
     meta: {
       title: "MDJRN Prompt gen",
     },
@@ -133,6 +233,6 @@ const nodes: Record<string, NodeData> = {
   },
 };
 
-export function getNodeDataByName(name: string){
-    return nodes[name] || null
+export function getNodeDataByName(name: string) {
+  return nodes[name] || null;
 }

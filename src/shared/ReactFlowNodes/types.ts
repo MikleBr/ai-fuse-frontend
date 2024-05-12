@@ -26,7 +26,8 @@ export type NodeData = {
     label: string;
   }[];
   // Чисто техническия хуета. Статусы нужны чтобы выводить в блоке данные о загрузке результата
-  status?: "init" | "pending" | "success" | "error";
+  // FIXME: Что-то тут уже ебатория
+  status?: "init" | "pending" | "success" | "error" | "waitForExecute";
   // Какой результат будет в следствие удачного запуска ноды.
   // Изначально всегда undefined
   result: Result;

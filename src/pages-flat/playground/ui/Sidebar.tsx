@@ -5,8 +5,20 @@ import { DragEvent, useState } from "react";
 
 const availableBlocks: { name: string; title: string; disabled?: boolean }[] = [
   {
-    name: 'midjourney-prompt-gen',
-    title: 'Генератор промптов для Midjourney'
+    name: 'a',
+    title: '1 text - 1 text'
+  },
+  {
+    name: 'b',
+    title: '2 text - 1 text'
+  },
+  {
+    name: 'c',
+    title: '1 text - 2 text'
+  },
+  {
+    name: 'd',
+    title: '2 text - 2 text'
   },
   {
     title: "Midjourney",
@@ -45,28 +57,26 @@ export function Sidebar({ className }: SidebarProps) {
   };
 
   return (
-    <Card
+    <div
       className={cn(
-        "gap-2 relative transition-all w-[320px] shrink-0 !rounded-none border-none flex flex-col bg-gray-100",
-        collapsed && "w-12",
+        "gap-2 relative p-4 overflow-hidden transition-all w-[290px] shrink-0 !rounded-none border-none flex flex-col bg-gray-100",
+        collapsed && "w-12 py-4 px-1",
         className
       )}
     >
-      <Button
-        variant="ghost"
-        size="icon"
-        className={cn("absolute right-3 top-1", collapsed && "right-1")}
-        onClick={() => setCollapsed((prev) => !prev)}
-      >
-        <ArrowLeft className={cn(collapsed && "rotate-180")} />
-      </Button>
+      <div className="flex justify-end">
+        <Button
+          variant="dark"
+          size="icon"
+          className={cn("", collapsed && "right-1")}
+          onClick={() => setCollapsed((prev) => !prev)}
+        >
+          <ArrowLeft className={cn(collapsed && "rotate-180")} />
+        </Button>
+      </div>
       {!collapsed && (
-        <div className="min-w-[280px]">
-          <Card.Head className="pb-1">
-            <Card.Title>AI Blocks</Card.Title>
-            <Card.Description>Main AI blocks</Card.Description>
-          </Card.Head>
-          <Card.Content className="flex flex-col gap-2">
+        <div className="min-w-[258px]">
+          <div className="flex flex-col gap-2">
             {availableBlocks.map((block, index) => (
               <div
                 draggable={!block.disabled}
@@ -84,9 +94,9 @@ export function Sidebar({ className }: SidebarProps) {
                 {block.disabled && <Badge>Premium</Badge>}
               </div>
             ))}
-          </Card.Content>
+          </div>
         </div>
       )}
-    </Card>
+    </div>
   );
 }

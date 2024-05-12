@@ -10,14 +10,14 @@ import { NodeCurtain } from "./NodeCurtain";
 import { useGraphContext } from "./GraphContext";
 import { NodeResult } from "./NodeResult";
 import { cloneDeep } from "lodash";
+import { WaitingStatus } from "./WaitingStatus";
 
 function TestNodeComponent(props: NodeProps<NodeData>) {
   // Так нужно
   const { data, selected, id } = props;
   const { status } = data;
+  console.log("🚀 ~ TestNodeComponent ~ status:", status)
   const { runNode } = useGraphContext();
-
-  const inProgress = status === "pending";
 
   return (
     <NodeWrapper {...props}>
@@ -25,6 +25,7 @@ function TestNodeComponent(props: NodeProps<NodeData>) {
       {/* <div className="drag-trigger absolute w-8 h-10 bg-primary top-16 -left-8 rounded-l-full flex items-center justify-center">
         <DragHandleDots2Icon width={20} height={20} />
       </div> */}
+      <WaitingStatus status={status} />
       <NodeResult result={data.result} status={data.status} />
       {data.inputs.length > 0 && (
         <>
@@ -52,7 +53,6 @@ function TestNodeComponent(props: NodeProps<NodeData>) {
       )}
       <div className="px-2 pb-2 flex gap-2 items-center">
         <Button
-          variant={inProgress ? "destructive" : "primary"}
           onClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
@@ -60,7 +60,7 @@ function TestNodeComponent(props: NodeProps<NodeData>) {
           }}
           size="icon"
         >
-          {inProgress ? <XIcon /> : <Play />}
+          <Play />
         </Button>
       </div>
       <NodeCurtain open={selected} className="flex flex-col justify-between">

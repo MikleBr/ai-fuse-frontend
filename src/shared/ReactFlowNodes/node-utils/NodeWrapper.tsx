@@ -16,9 +16,9 @@ export function NodeWrapper({
   const {title} = meta
 
   return (
-    <Card
+    <div
       className={cn(
-        "bg-white relative min-w-[320px] z-[2]",
+        "bg-white rounded-2xl border-4 border-stone-300 relative min-w-[320px] z-[2]",
         dragging && "shadow-xl",
         selected && "outline outline-primary",
         selected && status === 'success' && "outline outline-green-300",
@@ -34,6 +34,6 @@ export function NodeWrapper({
         {title}
       </div>
       {children}
-    </Card>
+    </div>
   );
 }
