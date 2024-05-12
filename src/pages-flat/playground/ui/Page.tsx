@@ -302,6 +302,7 @@ export function Page() {
                 strokeWidth: 4,
               },
             }}
+            // TODO: Разобраться с ограничениями на перемещение
             // translateExtent={[[-2000, -1000], [1000, 2000]]}
             // style={{
             //   backgroundColor: "#D3D2E5",
@@ -309,9 +310,10 @@ export function Page() {
           >
             <Background
               id="1"
-              gap={50}
+              gap={25}
+              size={3}
               color="#c3c3c3"
-              variant={BackgroundVariant.Lines}
+              variant={BackgroundVariant.Dots}
             />
           </ReactFlow>
         </div>

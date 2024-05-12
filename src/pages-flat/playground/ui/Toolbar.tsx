@@ -1,5 +1,5 @@
 import { Button, TextField } from "@/shared/components";
-import { Save, Share } from "lucide-react";
+import { Globe, Save, Share } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -22,11 +22,14 @@ export function Toolbar({}: ToolbarProps) {
         <input value={name} onChange={(e) => setName(e.target.value)} />
       </div>
       <div className="w-1/3 flex justify-end gap-2">
-        <Button size="S">
-          Сохранить <Save className="ml-1 w-5" />
+        <Button size="S" variant="dark">
+          <Globe className="mr-1 w-5" /> Опубликовать
         </Button>
-        <Button variant="secondary" size="S" >
-          Поделиться <Share className="ml-1 w-5" />
+        <Button size="S">
+          <Save className="mr-1 w-5" /> Сохранить
+        </Button>
+        <Button variant="secondary" size="S">
+          <Share className="mr-1 w-5" /> Поделиться
         </Button>
       </div>
     </div>
