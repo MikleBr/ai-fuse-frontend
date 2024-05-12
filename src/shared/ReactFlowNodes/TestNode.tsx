@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
 import { NodeProps, useStore } from "reactflow";
 import { Button, TextField, Typography } from "../components";
-import { Play, XIcon } from "lucide-react";
+import { Play, RefreshCw, XIcon } from "lucide-react";
 import { NodeWrapper } from "./node-utils/NodeWrapper";
 import { NodeData } from "./types";
 import { SourceHandler } from "./node-utils/source-handlers/Handler";
@@ -16,8 +16,9 @@ function TestNodeComponent(props: NodeProps<NodeData>) {
   // Так нужно
   const { data, selected, id } = props;
   const { status } = data;
-  console.log("🚀 ~ TestNodeComponent ~ status:", status)
   const { runNode } = useGraphContext();
+
+  const wasExecuted = status === "error" || status === "success";
 
   return (
     <NodeWrapper {...props}>
@@ -60,8 +61,21 @@ function TestNodeComponent(props: NodeProps<NodeData>) {
           }}
           size="icon"
         >
-          <Play />
+          {!wasExecuted && <Play />}
+          {wasExecuted && <RefreshCw />}
         </Button>
+        {data.result.data && (
+          <Button
+            variant="secondary"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              runNode(id);
+            }}
+          >
+            Очистить
+          </Button>
+        )}
       </div>
       <NodeCurtain open={selected} className="flex flex-col justify-between">
         <div>

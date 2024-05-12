@@ -74,29 +74,33 @@ export function Page() {
     [reactFlowInstance]
   );
 
-  const runBlock = (resultType: NodeData["result"]["type"]) => () => {
-    return new Promise((res, rej) => {
-      setTimeout(() => {
-        if (resultType === "image") {
-          res({
-            image: example.src,
-          });
-        }
-        if (resultType === "images") {
-          res({
-            images: [example.src, example.src, example.src, example.src],
-          });
-        }
-        if (resultType === "text") {
-          res({
-            text: "Hello, world!",
-          });
-        }
+  const runBlock =
+    (node: Node<NodeData>, resultType: NodeData["result"]["type"]) => () => {
+      return new Promise((res, rej) => {
+        setTimeout(() => {
+          if (node.data.meta.title === "Блок с ошибкой") {
+            rej("Error");
+          }
+          if (resultType === "image") {
+            res({
+              image: example.src,
+            });
+          }
+          if (resultType === "images") {
+            res({
+              images: [example.src, example.src, example.src, example.src],
+            });
+          }
+          if (resultType === "text") {
+            res({
+              text: "Hello, world!",
+            });
+          }
 
-        rej("");
-      }, 10000);
-    });
-  };
+          rej("");
+        }, 10000);
+      });
+    };
 
   const nodePending = (node: Node<NodeData>, inputData: any) => {
     setNodes((nodes) => {
@@ -125,6 +129,21 @@ export function Page() {
       }
       return nodes;
     });
+    setEdges((edges) => {
+      return edges.map((edge) => {
+        if (edge.source !== node.id) {
+          return edge;
+        }
+        return {
+          ...edge,
+          animated: false,
+          style: {
+            ...edge.style,
+            stroke: "#4ade80",
+          },
+        };
+      });
+    });
   };
   const nodeError = (node: Node<NodeData>, error: unknown) => {
     setNodes((nodes) => {
@@ -137,6 +156,21 @@ export function Page() {
         return newNodes;
       }
       return nodes;
+    });
+    setEdges((edges) => {
+      return edges.map((edge) => {
+        if (edge.source !== node.id) {
+          return edge;
+        }
+        return {
+          ...edge,
+          animated: false,
+          style: {
+            ...edge.style,
+            stroke: "#fb7185",
+          },
+        };
+      });
     });
   };
 
@@ -152,6 +186,15 @@ export function Page() {
       }
       return nodes;
     });
+
+    setEdges((edges) => {
+      return edges.map((edge) => {
+        if (edge.source !== nodeId) {
+          return edge;
+        }
+        return { ...edge, animated: true };
+      });
+    });
   };
 
   const prepareNode = (nodeId: string) => {
@@ -160,7 +203,7 @@ export function Page() {
     const node = nodes.find((node) => node.id === nodeId);
     if (!node) throw Error("Хуевый у тебя граф получился");
 
-    if (node.data.result.data){
+    if (node.data.result.data) {
       return;
     }
 
@@ -171,20 +214,37 @@ export function Page() {
     });
   };
 
-  const onRunNode = (nodeId: string) => {
+  const onRunNode = (startNodeId: string) => {
     const { graph: reversedGraph } = getReversedGraph(nodes, edges);
 
-    prepareNode(nodeId)
+    prepareNode(startNodeId);
+
+    setEdges((edges) => {
+      return edges.map((edge) => {
+        if (edge.source !== startNodeId) {
+          return edge;
+        }
+        return {
+          ...edge,
+          animated: false,
+          style: {
+            ...edge.style,
+            stroke: "#facc15",
+          },
+        };
+      });
+    });
 
     const runNode = async (nodeId: string): Promise<any> => {
       const node = nodes.find((node) => node.id === nodeId);
       if (!node) throw Error("Хуевый у тебя граф получился");
 
-      if (node.data.result.data){
-        return node.data.result.data
+      // FIXME: Переорганизовать костыль с замыканиями в startNodeId !== nodeId
+      if (node.data.result.data && startNodeId !== nodeId) {
+        return node.data.result.data;
       }
 
-      const func = runBlock(node.data.result.type);
+      const func = runBlock(node, node.data.result.type);
 
       const nodeDeps = reversedGraph[nodeId];
 
@@ -205,7 +265,7 @@ export function Page() {
       }
     };
 
-    runNode(nodeId);
+    runNode(startNodeId);
   };
 
   // TODO: Вынести это в фичу. Возможно переиспользование
@@ -233,7 +293,7 @@ export function Page() {
             onDrop={onDrop}
             onDragOver={onDragOver}
             connectionLineStyle={{
-              stroke: "#1a192b",
+              stroke: "#1a192b88",
               strokeWidth: 4,
             }}
             defaultEdgeOptions={{

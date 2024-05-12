@@ -15,6 +15,10 @@ const links = [
     label: "Песочница",
   },
   {
+    href: "/community",
+    label: "Сообщество",
+  },
+  {
     href: "/tariffs",
     label: "Тарифы",
   },

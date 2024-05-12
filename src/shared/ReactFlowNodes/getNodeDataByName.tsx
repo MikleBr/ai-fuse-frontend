@@ -3,6 +3,27 @@
 import { NodeData } from "./types";
 
 const nodes: Record<string, NodeData> = {
+  error: {
+    meta: {
+      title: "Блок с ошибкой",
+    },
+    inputs: [
+      {
+        label: "Text",
+        type: "text",
+      },
+    ],
+    outputs: [
+      {
+        label: "Text",
+        type: "text",
+      },
+    ],
+    params: [],
+    result: {
+      type: "text",
+    },
+  },
   a: {
     meta: {
       title: "1 text - 1 text",

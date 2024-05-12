@@ -5,6 +5,10 @@ import { DragEvent, useState } from "react";
 
 const availableBlocks: { name: string; title: string; disabled?: boolean }[] = [
   {
+    name: 'error',
+    title: 'Блок с ошибкой'
+  },
+  {
     name: 'a',
     title: '1 text - 1 text'
   },
