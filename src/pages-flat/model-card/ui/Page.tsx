@@ -8,7 +8,7 @@ import {
   BreadcrumbSeparator,
 } from "@/shared/components/Breadcrumb";
 import { CommonLayout } from "@/widgets/common-layout";
-import { CardHead } from "./CardHead";
+import { CardHead } from "./CardHead/CardHead";
 import { CardActions } from "./CardActions";
 import { DescriptionTab } from "./tabs/DescriptionTab";
 import { PlaygroundTab } from "./tabs/PlaygroundTab";
@@ -22,7 +22,7 @@ export function Page({}: PageProps) {
   const [activeTab, setActiveTab] = useState<string>("playground");
 
   return (
-    <CommonLayout withBanner>
+    <CommonLayout>
       <div className="w-full">
         <Breadcrumb className="mt-5">
           <BreadcrumbList>
@@ -41,27 +41,45 @@ export function Page({}: PageProps) {
         </Breadcrumb>
         <div className="w-full flex align-start flex-col-reverse md:flex-row md:justify-between mt-5">
           <CardHead />
-          <CardActions />
         </div>
         <Tabs
           activeTab={activeTab}
           setActiveTab={setActiveTab}
-          className="mt-5"
+          type="underline"
+          className="mt-8"
         >
-          <Tabs.TabItem tabKey="overview">Обзор</Tabs.TabItem>
-          <Tabs.TabItem tabKey="playground">Использование</Tabs.TabItem>
-          <Tabs.TabItem tabKey="examples">Примеры</Tabs.TabItem>
-          <Tabs.TabItem tabKey="reviews">Отзывы</Tabs.TabItem>
-          <Tabs.TabItem tabKey="qa">Q&A</Tabs.TabItem>
-          <Tabs.TabItem tabKey="alternatives">Похожее</Tabs.TabItem>
+          <Tabs.TabItem className="text-lg" tabKey="playground">
+            Использовать
+          </Tabs.TabItem>
+          <Tabs.TabItem className="text-lg" tabKey="history">
+            История
+          </Tabs.TabItem>
+          <Tabs.TabItem className="text-lg" tabKey="overview">
+            Обзор
+          </Tabs.TabItem>
+          <Tabs.TabItem className="text-lg" tabKey="examples">
+            Примеры
+          </Tabs.TabItem>
+          <Tabs.TabItem className="text-lg" tabKey="reviews">
+            Отзывы
+          </Tabs.TabItem>
+          <Tabs.TabItem className="text-lg" tabKey="qa">
+            Q&A
+          </Tabs.TabItem>
+          <Tabs.TabItem className="text-lg" tabKey="alternatives">
+            Похожее
+          </Tabs.TabItem>
         </Tabs>
       </div>
-      <div className="w-full mt-4 mb-8">
-        <Tabs.TabContent tabKey="overview" activeTab={activeTab}>
-          <DescriptionTab />
-        </Tabs.TabContent>
+      <div className="w-full mt-6 mb-8">
         <Tabs.TabContent tabKey="playground" activeTab={activeTab}>
           <PlaygroundTab />
+        </Tabs.TabContent>
+        <Tabs.TabContent tabKey="history" activeTab={activeTab}>
+          История генераций
+        </Tabs.TabContent>
+        <Tabs.TabContent tabKey="overview" activeTab={activeTab}>
+          <DescriptionTab />
         </Tabs.TabContent>
         <Tabs.TabContent tabKey="examples" activeTab={activeTab}>
           <ExamplesTab />

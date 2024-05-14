@@ -3,7 +3,9 @@ import {
   Badge,
   Button,
   Card,
+  Switch,
   TextField,
+  Textarea,
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -43,17 +45,10 @@ export function PlaygroundTab() {
       <div className="grid pb-20 grid-cols-4 gap-4">
         <div className="col-span-2">
           <Card>
-            <Card.Head className="flex flex-row justify-between items-center">
-              <div>
-                <Card.Title>Настройки</Card.Title>
-                <Card.Description className="mt-1">
-                  Базовые настройки для генерации
-                </Card.Description>
-              </div>
+            <Card.Head className="flex flex-row justify-between items-start">
               <Button
-                className="w-[180px]"
+                className="w-[240px]"
                 onClick={status === "loading" ? onAbort : onStart}
-                size="S"
                 variant={status === "loading" ? "destructive" : "primary"}
               >
                 {status !== "loading" ? (
@@ -74,13 +69,36 @@ export function PlaygroundTab() {
               </Button>
             </Card.Head>
             <Card.Content className="flex flex-col gap-4">
-              <TextField
-                label="Промпт"
+              <Textarea
+                label="Запрос"
+                minRows={2}
+                maxRows={5}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 required
-                placeholder="Prompt"
+                placeholder="Промпт для генерации изображения"
               />
+            </Card.Content>
+          </Card>
+          <Card className="mt-4">
+            <Card.Head className="flex flex-row items-start justify-between">
+              <div>
+                <Card.Title>Дополнительные настройки</Card.Title>
+                <Card.Description className="mt-1">
+                  Для продвинутых пользователей
+                </Card.Description>
+              </div>
+              <Button size="icon" variant="ghost" className="!m-0">
+                <ChevronDown />
+              </Button>
+            </Card.Head>
+            <Card.Content className="flex flex-col gap-4">
+              <div className="flex flex-col ">
+                <label className="text-sm mb-1 flex items-center gap-1 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  Покакать
+                </label>
+                <Switch />
+              </div>
               <div>
                 <label className="text-sm mb-1 flex items-center gap-1 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                   Количество изображений
@@ -119,30 +137,13 @@ export function PlaygroundTab() {
                   <Toggle variant="outline">WEBP</Toggle>
                 </div>
               </div>
+              <TextField label="Seed" placeholder="Seed" />
+              <TextField
+                label="Temperature"
+                placeholder="Temperature"
+                value="0.5"
+              />
             </Card.Content>
-          </Card>
-          <Card className="mt-4">
-            <Card.Head className="flex flex-row items-start justify-between">
-              <div>
-                <Card.Title>Дополнительные настройки</Card.Title>
-                <Card.Description className="mt-1">
-                  Для продвинутых пользователей
-                </Card.Description>
-              </div>
-              <Button size="icon" variant="ghost" className="!m-0">
-                <ChevronDown />
-              </Button>
-            </Card.Head>
-            {
-              <Card.Content className="flex flex-col gap-4">
-                <TextField label="Seed" placeholder="Seed" />
-                <TextField
-                  label="Temperature"
-                  placeholder="Temperature"
-                  value="0.5"
-                />
-              </Card.Content>
-            }
           </Card>
         </div>
         <div className="sticky top-4 self-start col-span-2">
@@ -167,11 +168,11 @@ export function PlaygroundTab() {
             )}
           </div>
           <div className="mt-2 flex gap-2">
-            <Button>
-              Скачать изображение <Download className="ml-1 inline w-4" />
+            <Button variant="dark">
+              Скачать изображение <Download className="mr-2 inline w-4" />
             </Button>
             <Button variant="secondary">
-              Поделиться <Share2 className="ml-1 inline w-4" />
+              Поделиться <Share2 className="inline w-4" />
             </Button>
           </div>
         </div>

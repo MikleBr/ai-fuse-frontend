@@ -1,5 +1,7 @@
 import { Badge, Card, Typography } from "@/shared/components";
 import { cn } from "@/shared/lib/utils";
+import { CardActions } from "../CardActions";
+import { Tags } from "./Tags";
 
 type CardHeadProps = {
   className?: string;
@@ -7,32 +9,24 @@ type CardHeadProps = {
 
 export function CardHead({ className }: CardHeadProps) {
   return (
-    <div className={cn("flex gap-4", className)}>
+    <div className={cn("w-full flex gap-4", className)}>
       <Card className="w-32 h-32">
         <img
           className="w-full h-full object-cover"
           src="https://upload.wikimedia.org/wikipedia/commons/2/24/Midjourney_Emblem.svg"
         />
       </Card>
-      <div className="flex flex-col">
-        <div className="mb-2 flex gap-1">
-          <Badge variant="secondary" className="text-xs py-0.5">
-            Generate image
-          </Badge>
-          <Badge variant="secondary" className="text-xs py-0.5">
-            Content Creators
-          </Badge>
-          <Badge variant="secondary" className="text-xs py-0.5">
-            Graphic Designers
-          </Badge>
-          <Badge variant="outline" className="text-xs py-0.5">
-            + 5 more
-          </Badge>
-        </div>
-        <div className="flex gap-2 items-end">
-          <Typography.Heading className="m-0" Component="h1" level={1}>
-            Midjourney
-          </Typography.Heading>
+      <div className="flex grow flex-col">
+        <div className="w-full flex justify-between">
+          <div>
+           <Tags tags={['Изображения', 'Дизайн', 'Фото', 'Генерация', 'Беброчка']} maxTagsCount={3} />
+            <div className="flex gap-2 items-end">
+              <Typography.Heading className="m-0" Component="h1" level={1}>
+                Midjourney
+              </Typography.Heading>
+            </div>
+          </div>
+          <CardActions />
         </div>
         <div className="flex mt-4 gap-10">
           <div className="flex flex-col">

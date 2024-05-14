@@ -22,8 +22,19 @@ function useTabsContext() {
   return context;
 }
 
+const bgStylesByType = {
+  block: "rounded-lg bg-muted text-muted-foreground p-1",
+  underline: "",
+};
+
+const underlineStylesByType = {
+  block: "h-8 bg-background shadow rounded-md top-1",
+  underline: "h-0.5 bg-primary bottom-0",
+};
+
 type TabsProps = {
   activeTab?: string | null;
+  type?: "block" | "underline";
   setActiveTab?: (tab: string) => void;
 } & React.PropsWithChildren &
   React.HTMLAttributes<HTMLDivElement>;
@@ -33,6 +44,7 @@ export function Tabs({
   className,
   activeTab,
   setActiveTab,
+  type = "block",
   ...restProps
 }: TabsProps) {
   const tabsRef = useRef<HTMLDivElement>(null);
@@ -65,8 +77,9 @@ export function Tabs({
         role="tablist"
         aria-label="Tabs panel"
         className={cn(
-          "relative inline-flex h-10 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground",
-          className,
+          "relative inline-flex h-10 items-center justify-center",
+          bgStylesByType[type],
+          className
         )}
         ref={tabsRef}
         {...restProps}
@@ -74,7 +87,10 @@ export function Tabs({
         {children}
         <div
           ref={activeItemBackgroundRef}
-          className="absolute z-0 transition-all duration-200 rounded-md h-8 bg-background text-foreground shadow"
+          className={cn(
+            "absolute z-0 transition-all duration-200",
+            underlineStylesByType[type]
+          )}
         />
       </div>
     </TabsContext.Provider>
@@ -116,9 +132,9 @@ function TabItem({
       id={tabKey}
       data-state={isActive ? "active" : undefined}
       className={cn(
-        "inline-flex relative z-[2] items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:text-foreground",
+        "inline-flex relative z-[2] items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:text-foreground",
         className,
-        isActive && activeClassName,
+        isActive && activeClassName
       )}
       {...restProps}
     >
