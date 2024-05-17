@@ -43,7 +43,7 @@ export function PlaygroundTab() {
   return (
     <>
       <div className="grid pb-20 grid-cols-4 gap-4">
-        <div className="col-span-2">
+        <div className="col-span-4 xl:col-span-2">
           <Card>
             <Card.Head className="flex flex-row justify-between items-start">
               <Button
@@ -146,7 +146,7 @@ export function PlaygroundTab() {
             </Card.Content>
           </Card>
         </div>
-        <div className="sticky top-4 self-start col-span-2">
+        <div className="sticky top-4 self-start col-span-4 xl:col-span-2">
           <div
             className={
               "overflow-hidden transition-all w-full rounded-lg relative"
@@ -169,10 +169,10 @@ export function PlaygroundTab() {
           </div>
           <div className="mt-2 flex gap-2">
             <Button variant="dark">
-              Скачать изображение <Download className="mr-2 inline w-4" />
+              Скачать изображение <Download className="ml-2 inline w-4" />
             </Button>
             <Button variant="secondary">
-              Поделиться <Share2 className="inline w-4" />
+              Поделиться <Share2 className="ml-2 inline w-4" />
             </Button>
           </div>
         </div>

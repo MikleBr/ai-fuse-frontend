@@ -1,9 +1,16 @@
-import { GetServerSideProps } from "next";
+import { type Model, modelMock } from "@/shared/mocks/model";
+import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 
-export const getServerSideProps: GetServerSideProps<{test: 123}> = async (context) => {
+type SSRResult = {
+  model: Model
+};
+
+export function getServerSideProps(
+  context: GetServerSidePropsContext
+): GetServerSidePropsResult<SSRResult> {
   return {
     props: {
-      test: 123
+      model: modelMock
     },
   };
-};
+}

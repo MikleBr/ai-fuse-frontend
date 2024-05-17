@@ -11,8 +11,12 @@ import { CommonLayout } from "@/widgets/common-layout";
 import { Filters } from "./Filters";
 import { TopFilters } from "./TopFilters";
 import { ModelCard } from "./ModelCard";
+import { InferGetServerSidePropsType } from "next";
+import { getServerSideProps } from "../ssr";
 
-export function Page() {
+export function Page({
+  model,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <CommonLayout>
       <Breadcrumb className="mt-5">
